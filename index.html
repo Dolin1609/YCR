@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YCR - You Create Reality</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .ycr-logo {
+            font-weight: 900;
+            font-size: 2rem;
+            letter-spacing: -0.05em;
+            color: #1a1a1a;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: #1a1a1a;
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #fff;
+            color: #1a1a1a;
+            border: 1px solid #1a1a1a;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+        .product-card .product-image-container {
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background-color: #e5e7eb;
+            aspect-ratio: 4 / 5;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        .product-image {
+            transition: transform 0.4s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 40;
+            display: none;
+        }
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            display: none;
+        }
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .slide.active {
+            opacity: 1;
+        }
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 10;
+        }
+        .slider-nav button {
+            background-color: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 3rem;
+            height: 3rem;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-30">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <a href="#" class="ycr-logo" onclick="navigateTo('home')">YCR</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('home')">Home</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Women' })">Women</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Men' })">Men</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Kids' })">Kids</a>
+                         <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Sale' })">Sale</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button class="ml-4 p-2 rounded-full text-gray-600 hover:text-gray-800 hover:bg-gray-100" onclick="navigateTo('cart')">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span id="cart-count" class="absolute top-4 right-16 text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                    </button>
+                    <div id="auth-container" class="ml-4"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <!-- Content will be loaded here by JavaScript -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto py-12 px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Shop</h3>
+                    <ul>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Women' })">Women</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Men' })">Men</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Kids' })">Kids</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Sale' })">Sale</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">About YCR</h3>
+                    <ul>
+                        <li class="mb-2"><a href="#" class="hover:underline">Our Story</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline">Careers</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline">Sustainability</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Customer Service</h3>
+                    <ul>
+                        <li class="mb-2"><a href="#" class="hover:underline">Help & FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline">Shipping & Returns</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-4">Stay Connected</h3>
+                    <p class="mb-4">Get 15% off your first order when you sign up for our newsletter.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Enter your email" class="p-2 rounded-l-lg text-gray-800 w-full">
+                        <button class="bg-gray-600 px-4 rounded-r-lg hover:bg-gray-500">Sign Up</button>
+                    </div>
+                    <div class="flex space-x-4 mt-4 text-2xl">
+                        <a href="#" class="hover:text-gray-400"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-gray-400"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-gray-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-gray-400"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-400 mt-12 border-t border-gray-700 pt-8">
+                 <a href="#" class="hover:underline" onclick="navigateTo('admin')">Admin Panel</a>
+                <p class="mt-4">&copy; 2024 YCR. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Order Confirmation Modal -->
+    <div id="order-confirmation-backdrop" class="modal-backdrop"></div>
+    <div id="order-confirmation-modal" class="modal-content bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center">
+        <div class="text-green-500 mb-4">
+            <i class="fas fa-check-circle fa-4x"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Thank You!</h2>
+        <p class="text-gray-600 mb-6">Your order has been placed successfully.</p>
+        <button class="btn-primary py-2 px-6 rounded-lg" onclick="closeOrderConfirmation()">Continue Shopping</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // =================================================================================
+        // IMPORTANT: FIREBASE CONFIGURATION
+        // You MUST replace these placeholder values with your actual Firebase project keys.
+        // To get these keys, go to your Firebase project, click the gear icon > Project settings,
+        // scroll down to "Your apps", and select the web app.
+        // =================================================================================
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // --- INITIALIZE FIREBASE ---
+        let app, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+            document.getElementById('main-content').innerHTML = `
+                <div class="p-8 text-center text-red-600">
+                    <h2 class="text-2xl font-bold">Configuration Error</h2>
+                    <p>Could not connect to the backend services. Please check the Firebase configuration.</p>
+                </div>`;
+        }
+        
+        // --- APP STATE ---
+        let cart = [];
+        let currentUser = null;
+        let sliderInterval;
+
+        // --- DATA ---
+        const products = [
+            // Women
+            { id: 2, name: 'High-Waisted Skinny Jeans', price: 89.99, image: 'https://images.pexels.com/photos/1035649/pexels-photo-1035649.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'Flattering high-waisted jeans with a comfortable stretch for a perfect fit.' },
+            { id: 3, name: 'Cozy Knit Sweater', price: 79.99, image: 'https://images.pexels.com/photos/6770028/pexels-photo-6770028.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'Stay warm and stylish in this incredibly soft knit sweater.' },
+            { id: 6, name: 'Floral Sundress', price: 99.99, image: 'https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A light and airy sundress with a beautiful floral pattern, perfect for summer.' },
+            { id: 9, name: 'Elegant Business Blazer', price: 129.99, image: 'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A sharply tailored blazer that means business. Perfect for the office or a night out.' },
+            { id: 10, name: 'Silk Camisole Top', price: 49.99, image: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A luxurious silk camisole, perfect for layering or wearing on its own.' },
+            { id: 11, name: 'Leather Moto Jacket', price: 249.99, image: 'https://images.pexels.com/photos/1909791/pexels-photo-1909791.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A timeless leather jacket with an edgy, modern feel.' },
+            // Men
+            { id: 1, name: 'Classic Crewneck Tee', price: 29.99, image: 'https://images.pexels.com/photos/991509/pexels-photo-991509.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A timeless tee made from premium, ultra-soft cotton. Perfect for everyday wear.' },
+            { id: 4, name: 'Modern Fit Chinos', price: 69.99, image: 'https://images.pexels.com/photos/8393930/pexels-photo-8393930.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'Versatile chinos that can be dressed up or down for any occasion.' },
+            { id: 5, name: 'Graphic Print Hoodie', price: 59.99, image: 'https://images.pexels.com/photos/5061246/pexels-photo-5061246.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A comfortable hoodie featuring a unique YCR graphic print.' },
+            { id: 8, name: 'Sport Performance Shorts', price: 49.99, image: 'https://images.pexels.com/photos/3768025/pexels-photo-3768025.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'Lightweight and breathable shorts designed for maximum comfort during workouts.' },
+            { id: 12, name: 'Wool Peacoat', price: 299.99, image: 'https://images.pexels.com/photos/1202849/pexels-photo-1202849.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A classic wool peacoat for sophisticated warmth during colder months.' },
+            { id: 13, name: 'Slim-Fit Dress Shirt', price: 69.99, image: 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A crisp, slim-fit shirt perfect for any formal occasion.' },
+            // Kids
+            { id: 7, name: 'Kids Dino T-Shirt', price: 19.99, image: 'https://images.pexels.com/photos/6955172/pexels-photo-6955172.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'A fun and playful t-shirt with a cool dinosaur graphic that kids will love.' },
+            { id: 15, name: 'Bright Yellow Raincoat', price: 45.99, image: 'https://images.pexels.com/photos/459957/pexels-photo-459957.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'Keep them dry and visible on rainy days with this cheerful raincoat.' },
+            { id: 16, name: 'Denim Overalls', price: 55.99, image: 'https://images.pexels.com/photos/1619801/pexels-photo-1619801.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'Durable and stylish denim overalls for all-day play.' },
+            { id: 17, name: 'Cozy Fleece Pullover', price: 39.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'A warm and soft fleece pullover for chilly adventures.' },
+        ];
+
+        // --- TEMPLATES ---
+        const templates = {
+            home: `
+                <div id="page-home" class="page">
+                    <section class="slider-container">
+                        <div class="slide active">
+                            <img class="slide-image" src="https://images.pexels.com/photos/1485781/pexels-photo-1485781.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="YCR Collection">
+                            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
+                                <div>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">You Create Reality</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Designer Apparel. Your Vision.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Men' })">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slide">
+                            <img class="slide-image" src="https://images.pexels.com/photos/3755706/pexels-photo-3755706.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="Summer Styles">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
+                                <div>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Summer Collection</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Light, Bright & Ready for Sun.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Women' })">Explore Styles</a>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="slide">
+                            <img class="slide-image" src="https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="New Arrivals">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
+                                <div>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">New Arrivals</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Fresh Looks Have Landed.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Men' })">Discover More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-nav">
+                            <button id="prev-slide"><i class="fas fa-chevron-left"></i></button>
+                            <button id="next-slide"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </section>
+                     <section class="py-16 bg-white">
+                        <div class="container mx-auto px-4">
+                            <h2 class="text-3xl font-bold text-center mb-12">Shop by Category</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div class="relative rounded-lg overflow-hidden group cursor-pointer" onclick="navigateTo('category', { category: 'Women' })">
+                                    <img src="https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Women's Fashion" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                                        <h3 class="text-white text-3xl font-bold">Women</h3>
+                                    </div>
+                                </div>
+                                <div class="relative rounded-lg overflow-hidden group cursor-pointer" onclick="navigateTo('category', { category: 'Men' })">
+                                    <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Men's Fashion" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                                        <h3 class="text-white text-3xl font-bold">Men</h3>
+                                    </div>
+                                </div>
+                                <div class="relative rounded-lg overflow-hidden group cursor-pointer" onclick="navigateTo('category', { category: 'Kids' })">
+                                    <img src="https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Kids' Fashion" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                                        <h3 class="text-white text-3xl font-bold">Kids</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="py-16">
+                        <div class="container mx-auto px-4">
+                            <h2 class="text-3xl font-bold text-center mb-12">Featured Products</h2>
+                            <div id="home-products" class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"></div>
+                        </div>
+                    </section>
+                </div>`,
+            category: `
+                <div id="page-category" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <h1 id="category-title" class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8"></h1>
+                        <div id="category-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"></div>
+                    </div>
+                </div>`,
+            product: `
+                <div id="page-product" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <div class="grid md:grid-cols-2 gap-12 items-start">
+                            <div class="rounded-lg shadow-lg overflow-hidden"><img id="product-detail-image" src="" alt="Product Image" class="w-full"></div>
+                            <div>
+                                <h1 id="product-detail-name" class="text-4xl font-extrabold"></h1>
+                                <p id="product-detail-price" class="text-3xl text-gray-700 my-4"></p>
+                                <p id="product-detail-description" class="text-gray-600 leading-relaxed mb-6"></p>
+                                <div class="flex items-center mb-6">
+                                    <label for="size-select" class="mr-4 font-semibold">Size:</label>
+                                    <select id="size-select" class="rounded-md border-gray-300 shadow-sm"><option>S</option><option>M</option><option>L</option><option>XL</option></select>
+                                </div>
+                                <button id="add-to-cart-btn" class="btn-primary w-full py-3 text-lg rounded-lg shadow-md">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`,
+            cart: `
+                <div id="page-cart" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8">Your Cart</h1>
+                        <div id="cart-content"></div>
+                    </div>
+                </div>`,
+            checkout: `
+                <div id="page-checkout" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8 text-center">Checkout</h1>
+                        <div class="grid md:grid-cols-2 gap-12">
+                            <div class="bg-white p-8 rounded-lg shadow-lg">
+                                <h2 class="text-2xl font-bold mb-6">Shipping Information</h2>
+                                <form>
+                                    <div class="grid grid-cols-2 gap-4"><input type="text" placeholder="First Name" class="p-3 border rounded-lg w-full col-span-1"><input type="text" placeholder="Last Name" class="p-3 border rounded-lg w-full col-span-1"></div>
+                                    <input type="email" placeholder="Email Address" class="p-3 border rounded-lg w-full mt-4">
+                                    <input type="text" placeholder="Address" class="p-3 border rounded-lg w-full mt-4">
+                                    <div class="grid grid-cols-3 gap-4 mt-4"><input type="text" placeholder="City" class="p-3 border rounded-lg w-full"><input type="text" placeholder="State" class="p-3 border rounded-lg w-full"><input type="text" placeholder="ZIP Code" class="p-3 border rounded-lg w-full"></div>
+                                </form>
+                            </div>
+                            <div class="bg-white p-8 rounded-lg shadow-lg">
+                                <h2 class="text-2xl font-bold mb-6">Payment Details</h2>
+                                <div class="flex justify-around mb-6 border-b"><button class="py-3 px-6 font-semibold border-b-2 border-black">Credit Card</button><button class="py-3 px-6 font-semibold text-gray-500">PayPal</button><button class="py-3 px-6 font-semibold text-gray-500">Other</button></div>
+                                <form id="payment-form">
+                                    <input type="text" placeholder="Card Number" class="p-3 border rounded-lg w-full">
+                                    <input type="text" placeholder="Name on Card" class="p-3 border rounded-lg w-full mt-4">
+                                    <div class="grid grid-cols-2 gap-4 mt-4"><input type="text" placeholder="MM/YY" class="p-3 border rounded-lg w-full"><input type="text" placeholder="CVC" class="p-3 border rounded-lg w-full"></div>
+                                    <button type="submit" class="btn-primary w-full py-3 mt-8 rounded-lg">Place Order</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>`,
+            admin: `
+                <div id="page-admin" class="page">
+                    <div class="container mx-auto px-4 py-12">
+                        <h1 class="text-4xl font-extrabold mb-8">Admin Panel</h1>
+                        <div id="admin-content" class="bg-white p-8 rounded-lg shadow-lg"></div>
+                    </div>
+                </div>`,
+            login: `
+                <div id="page-login" class="page">
+                     <div class="flex items-center justify-center py-12 px-4">
+                        <div class="w-full max-w-md space-y-8 bg-white p-10 rounded-lg shadow-lg">
+                            <div><h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2></div>
+                            <form id="login-form" class="mt-8 space-y-6">
+                                <input type="email" id="login-email" placeholder="Email address" required class="w-full p-3 border rounded-lg">
+                                <input type="password" id="login-password" placeholder="Password" required class="w-full p-3 border rounded-lg">
+                                <button type="submit" class="btn-primary w-full py-3 rounded-lg">Sign in</button>
+                                <p class="text-center text-sm">Don't have an account? <a href="#" onclick="window.navigateTo('signup')" class="font-medium text-indigo-600 hover:text-indigo-500">Sign up</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>`,
+            signup: `
+                <div id="page-signup" class="page">
+                     <div class="flex items-center justify-center py-12 px-4">
+                        <div class="w-full max-w-md space-y-8 bg-white p-10 rounded-lg shadow-lg">
+                            <div><h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Create an account</h2></div>
+                            <form id="signup-form" class="mt-8 space-y-6">
+                                <input type="email" id="signup-email" placeholder="Email address" required class="w-full p-3 border rounded-lg">
+                                <input type="password" id="signup-password" placeholder="Password" required class="w-full p-3 border rounded-lg">
+                                <button type="submit" class="btn-primary w-full py-3 rounded-lg">Create Account</button>
+                                <p class="text-center text-sm">Already have an account? <a href="#" onclick="window.navigateTo('login')" class="font-medium text-indigo-600 hover:text-indigo-500">Sign in</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>`
+        };
+        
+        // --- ROUTING & RENDERING ---
+        const mainContent = document.getElementById('main-content');
+        
+        window.navigateTo = (pageId, params = {}) => {
+            clearInterval(sliderInterval); // Clear slider timer on page change
+            const pageTemplate = templates[pageId];
+            if (pageTemplate) {
+                mainContent.innerHTML = pageTemplate;
+                const pageElement = mainContent.querySelector('.page');
+                if(pageElement) pageElement.classList.add('active');
+
+                // Page-specific initializers
+                if (pageId === 'home') renderHomePage();
+                else if (pageId === 'category') renderCategoryPage(params.category);
+                else if (pageId === 'product') renderProductPage(params.productId);
+                else if (pageId === 'cart') renderCartPage();
+                else if (pageId === 'checkout') initCheckoutPage();
+                else if (pageId === 'login') initLoginForm();
+                else if (pageId === 'signup') initSignupForm();
+                else if (pageId === 'admin') checkAdminAccess();
+            } else {
+                 mainContent.innerHTML = `<div class="p-8 text-center"><h2>404 - Page Not Found</h2></div>`;
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function renderHomePage() {
+            const container = document.getElementById('home-products');
+            if(container) {
+                container.innerHTML = products.slice(0,4).map(createProductCard).join('');
+            }
+            initSlider();
+        }
+        
+        function renderCategoryPage(category) {
+            const titleEl = document.getElementById('category-title');
+            const containerEl = document.getElementById('category-products');
+            if(titleEl) titleEl.textContent = category;
+            
+            if(containerEl) {
+                let filteredProducts = products.filter(p => p.category === category);
+                if (category === 'Sale') {
+                     filteredProducts = [products[2], products[4], products[10], products[13]]; // Example sale items
+                }
+                containerEl.innerHTML = filteredProducts.map(createProductCard).join('');
+            }
+        }
+
+        function renderProductPage(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            document.getElementById('product-detail-image').src = product.image;
+            document.getElementById('product-detail-name').textContent = product.name;
+            document.getElementById('product-detail-price').textContent = `$${product.price}`;
+            document.getElementById('product-detail-description').textContent = product.description;
+            document.getElementById('add-to-cart-btn').onclick = () => addToCart(product);
+        }
+
+        function createProductCard(product) {
+            return `
+                <div class="product-card group cursor-pointer" onclick="window.navigateTo('product', { productId: ${product.id} })">
+                    <div class="product-image-container"><img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x500.png/cccccc/FFFFFF?text=Image+Error';"></div>
+                    <div class="mt-4">
+                        <h3 class="text-sm text-gray-700 font-medium">${product.name}</h3>
+                        <p class="mt-1 text-lg font-semibold text-gray-900">$${product.price}</p>
+                    </div>
+                </div>`;
+        }
+
+        // --- SLIDER LOGIC ---
+        function initSlider() {
+            const slides = document.querySelectorAll('.slide');
+            if (!slides.length) return;
+            
+            let currentSlide = 0;
+
+            const showSlide = (n) => {
+                slides.forEach(slide => slide.classList.remove('active'));
+                slides[n].classList.add('active');
+            };
+
+            const nextSlide = () => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            };
+
+            const prevSlide = () => {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            };
+
+            document.getElementById('next-slide').addEventListener('click', () => {
+                nextSlide();
+                resetSliderInterval();
+            });
+            document.getElementById('prev-slide').addEventListener('click', () => {
+                prevSlide();
+                resetSliderInterval();
+            });
+
+            const resetSliderInterval = () => {
+                clearInterval(sliderInterval);
+                sliderInterval = setInterval(nextSlide, 5000);
+            };
+
+            resetSliderInterval();
+        }
+
+        // --- AUTHENTICATION ---
+        function setupAuthListener() {
+            if (!auth) return;
+            onAuthStateChanged(auth, user => {
+                currentUser = user;
+                updateAuthUI();
+            });
+        }
+
+        function updateAuthUI() {
+            const container = document.getElementById('auth-container');
+            if (container) {
+                if (currentUser) {
+                    container.innerHTML = `<button onclick="window.handleSignOut()" class="btn-secondary py-2 px-4 rounded-lg">Logout</button>`;
+                } else {
+                    container.innerHTML = `<button onclick="window.navigateTo('login')" class="btn-primary py-2 px-4 rounded-lg">Login</button>`;
+                }
+            }
+        }
+
+        function initLoginForm() {
+            const form = document.getElementById('login-form');
+            if(form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+                    try {
+                        await signInWithEmailAndPassword(auth, email, password);
+                        navigateTo('home');
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                });
+            }
+        }
+
+        function initSignupForm() {
+            const form = document.getElementById('signup-form');
+            if(form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('signup-email').value;
+                    const password = document.getElementById('signup-password').value;
+                    try {
+                        await createUserWithEmailAndPassword(auth, email, password);
+                        navigateTo('home');
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                });
+            }
+        }
+        
+        window.handleSignOut = async () => {
+            try {
+                await signOut(auth);
+                navigateTo('home');
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+        
+        // --- ADMIN ---
+        function checkAdminAccess() {
+            const content = document.getElementById('admin-content');
+            if(!content) return;
+            if (currentUser && currentUser.email === 'admin@ycr.com') {
+                 content.innerHTML = `
+                    <h2 class="text-2xl font-bold">Welcome, Admin!</h2>
+                    <p class="text-gray-600">Full admin controls for managing users, orders, and products would be available here.</p>
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold">User Management</h3>
+                        <p class="mt-2">No users found (demo).</p>
+                    </div>`;
+            } else {
+                content.innerHTML = `
+                    <h2 class="text-2xl font-bold text-red-600">Access Denied</h2>
+                    <p class="text-gray-600">You do not have permission to view this page. Please log in as an administrator (admin@ycr.com).</p>`;
+            }
+        }
+
+        // --- CART & CHECKOUT ---
+        function addToCart(product) {
+            const size = document.getElementById('size-select')?.value || 'M';
+            const existingItem = cart.find(item => item.id === product.id && item.size === size);
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                cart.push({ ...product, size, quantity: 1 });
+            }
+            updateCartCount();
+            showNotification(`'${product.name}' has been added to your cart!`);
+        }
+
+        window.removeFromCart = (index) => {
+            cart.splice(index, 1);
+            renderCartPage();
+        }
+
+        function updateCartCount() {
+            const countEl = document.getElementById('cart-count');
+            if(countEl) {
+                countEl.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            }
+        }
+
+        function renderCartPage() {
+            const container = document.getElementById('cart-content');
+            if(!container) return;
+            updateCartCount();
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16">
+                        <i class="fas fa-shopping-bag text-6xl text-gray-300 mb-4"></i>
+                        <h2 class="text-2xl font-semibold text-gray-700 mb-2">Your cart is empty</h2>
+                        <p class="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
+                        <a href="#" class="btn-secondary py-3 px-8 rounded-full" onclick="window.navigateTo('home')">Continue Shopping</a>
+                    </div>`;
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const shipping = 5.00;
+            const total = subtotal + shipping;
+
+            container.innerHTML = `
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    ${cart.map((item, index) => `
+                        <div class="flex items-center justify-between py-4 border-b">
+                            <div class="flex items-center">
+                                <img src="${item.image}" alt="${item.name}" class="w-20 h-24 object-cover rounded-md mr-4">
+                                <div>
+                                    <p class="font-semibold">${item.name}</p>
+                                    <p class="text-sm text-gray-500">Size: ${item.size}</p>
+                                    <button class="text-red-500 text-sm hover:underline" onclick="window.removeFromCart(${index})">Remove</button>
+                                </div>
+                            </div>
+                            <p class="font-semibold w-24 text-right">$${(item.price * item.quantity).toFixed(2)}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="mt-8 md:w-1/3 md:ml-auto bg-white p-8 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Summary</h2>
+                    <div class="flex justify-between mb-2"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+                    <div class="flex justify-between mb-2"><span>Shipping</span><span>$${shipping.toFixed(2)}</span></div>
+                    <hr class="my-4">
+                    <div class="flex justify-between font-bold text-xl"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+                    <button class="btn-primary w-full py-3 mt-6 rounded-lg" onclick="window.navigateTo('checkout')">Proceed to Checkout</button>
+                </div>`;
+        }
+        
+        function initCheckoutPage() {
+            const form = document.getElementById('payment-form');
+            if(form) {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    showOrderConfirmation();
+                });
+            }
+        }
+
+        function showOrderConfirmation() {
+            const backdrop = document.getElementById('order-confirmation-backdrop');
+            const modal = document.getElementById('order-confirmation-modal');
+            if(backdrop && modal) {
+                backdrop.style.display = 'block';
+                modal.style.display = 'block';
+            }
+        }
+
+        window.closeOrderConfirmation = () => {
+            const backdrop = document.getElementById('order-confirmation-backdrop');
+            const modal = document.getElementById('order-confirmation-modal');
+            if(backdrop && modal) {
+                backdrop.style.display = 'none';
+                modal.style.display = 'none';
+            }
+            cart = [];
+            updateCartCount();
+            navigateTo('home');
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-24 right-5 bg-green-500 text-white py-3 px-5 rounded-lg shadow-lg z-50';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // --- INITIAL LOAD ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (auth) {
+                setupAuthListener();
+            }
+            navigateTo('home');
+        });
+    </script>
+</body>
+</html>
