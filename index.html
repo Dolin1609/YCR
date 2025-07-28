@@ -139,6 +139,43 @@
             height: 3rem;
             font-size: 1.5rem;
         }
+         #tshirt-design-preview {
+            position: relative;
+            width: 400px;
+            height: 500px;
+        }
+        #tshirt-image {
+            width: 100%;
+            height: 100%;
+        }
+        #uploaded-image-preview {
+            position: absolute;
+            top: 100px;
+            left: 125px;
+            width: 150px;
+            height: 150px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: move;
+            border: 2px dashed #ccc;
+        }
+        .filter-color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+        .filter-color-swatch.selected {
+            border-color: #1a1a1a;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #1a1a1a;
+        }
+        .filter-size-button.selected {
+            background-color: #1a1a1a;
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -148,19 +185,20 @@
         <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <div class="flex-shrink-0">
-                    <a href="#" class="ycr-logo" onclick="navigateTo('home')">YCR</a>
+                    <a href="#" class="ycr-logo" onclick="window.navigateTo('home')">YCR</a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('home')">Home</a>
-                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Women' })">Women</a>
-                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Men' })">Men</a>
-                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Kids' })">Kids</a>
-                         <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="navigateTo('category', { category: 'Sale' })">Sale</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="window.navigateTo('home')">Home</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="window.navigateTo('category', { category: 'Women' })">Women</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="window.navigateTo('category', { category: 'Men' })">Men</a>
+                        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="window.navigateTo('category', { category: 'Kids' })">Kids</a>
+                         <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="window.navigateTo('category', { category: 'Sale' })">Sale</a>
+                         <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900" onclick="window.navigateTo('customize')">Design Your Own</a>
                     </div>
                 </div>
                 <div class="flex items-center">
-                    <button class="ml-4 p-2 rounded-full text-gray-600 hover:text-gray-800 hover:bg-gray-100" onclick="navigateTo('cart')">
+                    <button class="ml-4 p-2 rounded-full text-gray-600 hover:text-gray-800 hover:bg-gray-100" onclick="window.navigateTo('cart')">
                         <i class="fas fa-shopping-bag"></i>
                         <span id="cart-count" class="absolute top-4 right-16 text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">0</span>
                     </button>
@@ -181,16 +219,16 @@
                 <div>
                     <h3 class="font-bold text-lg mb-4">Shop</h3>
                     <ul>
-                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Women' })">Women</a></li>
-                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Men' })">Men</a></li>
-                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Kids' })">Kids</a></li>
-                        <li class="mb-2"><a href="#" class="hover:underline" onclick="navigateTo('category', { category: 'Sale' })">Sale</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="window.navigateTo('category', { category: 'Women' })">Women</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="window.navigateTo('category', { category: 'Men' })">Men</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="window.navigateTo('category', { category: 'Kids' })">Kids</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="window.navigateTo('category', { category: 'Sale' })">Sale</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="font-bold text-lg mb-4">About YCR</h3>
                     <ul>
-                        <li class="mb-2"><a href="#" class="hover:underline">Our Story</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="window.navigateTo('about')">Our Story</a></li>
                         <li class="mb-2"><a href="#" class="hover:underline">Careers</a></li>
                         <li class="mb-2"><a href="#" class="hover:underline">Sustainability</a></li>
                     </ul>
@@ -200,7 +238,7 @@
                     <ul>
                         <li class="mb-2"><a href="#" class="hover:underline">Help & FAQ</a></li>
                         <li class="mb-2"><a href="#" class="hover:underline">Shipping & Returns</a></li>
-                        <li class="mb-2"><a href="#" class="hover:underline">Contact Us</a></li>
+                        <li class="mb-2"><a href="#" class="hover:underline" onclick="window.navigateTo('contact')">Contact Us</a></li>
                     </ul>
                 </div>
                 <div>
@@ -219,7 +257,7 @@
                 </div>
             </div>
             <div class="text-center text-gray-400 mt-12 border-t border-gray-700 pt-8">
-                 <a href="#" class="hover:underline" onclick="navigateTo('admin')">Admin Panel</a>
+                 <a href="#" class="hover:underline" onclick="window.navigateTo('admin')">Admin Panel</a>
                 <p class="mt-4">&copy; 2024 YCR. All Rights Reserved.</p>
             </div>
         </div>
@@ -233,7 +271,7 @@
         </div>
         <h2 class="text-2xl font-bold mb-2">Thank You!</h2>
         <p class="text-gray-600 mb-6">Your order has been placed successfully.</p>
-        <button class="btn-primary py-2 px-6 rounded-lg" onclick="closeOrderConfirmation()">Continue Shopping</button>
+        <button class="btn-primary py-2 px-6 rounded-lg" onclick="window.closeOrderConfirmation()">Continue Shopping</button>
     </div>
 
     <script type="module">
@@ -273,29 +311,62 @@
         let cart = [];
         let currentUser = null;
         let sliderInterval;
+        let currentCategory = '';
 
         // --- DATA ---
         const products = [
-            // Women
-            { id: 2, name: 'High-Waisted Skinny Jeans', price: 89.99, image: 'https://images.pexels.com/photos/1035649/pexels-photo-1035649.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'Flattering high-waisted jeans with a comfortable stretch for a perfect fit.' },
-            { id: 3, name: 'Cozy Knit Sweater', price: 79.99, image: 'https://images.pexels.com/photos/6770028/pexels-photo-6770028.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'Stay warm and stylish in this incredibly soft knit sweater.' },
-            { id: 6, name: 'Floral Sundress', price: 99.99, image: 'https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A light and airy sundress with a beautiful floral pattern, perfect for summer.' },
-            { id: 9, name: 'Elegant Business Blazer', price: 129.99, image: 'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A sharply tailored blazer that means business. Perfect for the office or a night out.' },
-            { id: 10, name: 'Silk Camisole Top', price: 49.99, image: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A luxurious silk camisole, perfect for layering or wearing on its own.' },
-            { id: 11, name: 'Leather Moto Jacket', price: 249.99, image: 'https://images.pexels.com/photos/1909791/pexels-photo-1909791.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', description: 'A timeless leather jacket with an edgy, modern feel.' },
-            // Men
-            { id: 1, name: 'Classic Crewneck Tee', price: 29.99, image: 'https://images.pexels.com/photos/991509/pexels-photo-991509.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A timeless tee made from premium, ultra-soft cotton. Perfect for everyday wear.' },
-            { id: 4, name: 'Modern Fit Chinos', price: 69.99, image: 'https://images.pexels.com/photos/8393930/pexels-photo-8393930.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'Versatile chinos that can be dressed up or down for any occasion.' },
-            { id: 5, name: 'Graphic Print Hoodie', price: 59.99, image: 'https://images.pexels.com/photos/5061246/pexels-photo-5061246.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A comfortable hoodie featuring a unique YCR graphic print.' },
-            { id: 8, name: 'Sport Performance Shorts', price: 49.99, image: 'https://images.pexels.com/photos/3768025/pexels-photo-3768025.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'Lightweight and breathable shorts designed for maximum comfort during workouts.' },
-            { id: 12, name: 'Wool Peacoat', price: 299.99, image: 'https://images.pexels.com/photos/1202849/pexels-photo-1202849.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A classic wool peacoat for sophisticated warmth during colder months.' },
-            { id: 13, name: 'Slim-Fit Dress Shirt', price: 69.99, image: 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', description: 'A crisp, slim-fit shirt perfect for any formal occasion.' },
-            // Kids
-            { id: 7, name: 'Kids Dino T-Shirt', price: 19.99, image: 'https://images.pexels.com/photos/6955172/pexels-photo-6955172.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'A fun and playful t-shirt with a cool dinosaur graphic that kids will love.' },
-            { id: 15, name: 'Bright Yellow Raincoat', price: 45.99, image: 'https://images.pexels.com/photos/459957/pexels-photo-459957.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'Keep them dry and visible on rainy days with this cheerful raincoat.' },
-            { id: 16, name: 'Denim Overalls', price: 55.99, image: 'https://images.pexels.com/photos/1619801/pexels-photo-1619801.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'Durable and stylish denim overalls for all-day play.' },
-            { id: 17, name: 'Cozy Fleece Pullover', price: 39.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', description: 'A warm and soft fleece pullover for chilly adventures.' },
+             // Women (16 items)
+            { id: 2, name: 'High-Waisted Skinny Jeans', price: 89.99, image: 'https://images.pexels.com/photos/1035649/pexels-photo-1035649.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jeans', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-20T10:00:00Z', onSale: false },
+            { id: 3, name: 'Cozy Knit Sweater', price: 79.99, salePrice: 59.99, image: 'https://images.pexels.com/photos/6770028/pexels-photo-6770028.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'sweater', color: 'beige', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-18T10:00:00Z', onSale: true },
+            { id: 6, name: 'Floral Sundress', price: 99.99, image: 'https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'dress', color: 'red', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
+            { id: 9, name: 'Elegant Business Blazer', price: 129.99, image: 'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'blazer', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-15T10:00:00Z', onSale: false },
+            { id: 10, name: 'Silk Camisole Top', price: 49.99, salePrice: 34.99, image: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'top', color: 'pink', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-25T10:00:00Z', onSale: true },
+            { id: 11, name: 'Leather Moto Jacket', price: 249.99, image: 'https://images.pexels.com/photos/1909791/pexels-photo-1909791.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jacket', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-06-30T10:00:00Z', onSale: false },
+            { id: 18, name: 'Wide-Leg Trousers', price: 79.99, image: 'https://images.pexels.com/photos/7142337/pexels-photo-7142337.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'green', sizes: ['M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-11T10:00:00Z', onSale: false },
+            { id: 21, name: 'V-Neck Tee', price: 24.99, image: 'https://images.pexels.com/photos/2010877/pexels-photo-2010877.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'tshirt', color: 'white', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-27T10:00:00Z', onSale: false },
+            { id: 22, name: 'Denim Shorts', price: 59.99, image: 'https://images.pexels.com/photos/159888/fashion-hand-bag-stylish-costume-159888.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'shorts', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
+            { id: 23, name: 'Polo Shirt Dress', price: 89.99, image: 'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'dress', color: 'pink', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-25T10:00:00Z', onSale: false },
+            { id: 24, name: 'Athletic Track Pants', price: 69.99, image: 'https://images.pexels.com/photos/4132641/pexels-photo-4132641.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'grey', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-24T10:00:00Z', onSale: false },
+            { id: 25, name: 'Boyfriend Jeans', price: 99.99, image: 'https://images.pexels.com/photos/1642228/pexels-photo-1642228.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jeans', color: 'blue', sizes: ['M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
+            { id: 26, name: 'Formal Blouse', price: 59.99, image: 'https://images.pexels.com/photos/3771836/pexels-photo-3771836.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
+            { id: 27, name: 'Oversized Hoodie', price: 79.99, image: 'https://images.pexels.com/photos/7018391/pexels-photo-7018391.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'hoodie', color: 'black', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-21T10:00:00Z', onSale: false },
+            { id: 28, name: 'Linen Pants', price: 69.99, image: 'https://images.pexels.com/photos/4955331/pexels-photo-4955331.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'beige', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-20T10:00:00Z', onSale: false },
+            { id: 29, name: 'Puffer Vest', price: 89.99, image: 'https://images.pexels.com/photos/6765439/pexels-photo-6765439.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jacket', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: false },
+            // Men (16 items)
+            { id: 1, name: 'Classic Crewneck Tee', price: 29.99, image: 'https://images.pexels.com/photos/991509/pexels-photo-991509.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'black', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
+            { id: 4, name: 'Modern Fit Chinos', price: 69.99, image: 'https://images.pexels.com/photos/8393930/pexels-photo-8393930.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'chinos', color: 'beige', sizes: ['M', 'L'], pantSizes: [30, 32, 34, 36], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: false },
+            { id: 5, name: 'Graphic Print Hoodie', price: 59.99, salePrice: 45.00, image: 'https://images.pexels.com/photos/5061246/pexels-photo-5061246.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'hoodie', color: 'grey', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-24T10:00:00Z', onSale: true },
+            { id: 8, name: 'Sport Performance Shorts', price: 49.99, image: 'https://images.pexels.com/photos/3768025/pexels-photo-3768025.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shorts', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
+            { id: 12, name: 'Wool Peacoat', price: 299.99, image: 'https://images.pexels.com/photos/1202849/pexels-photo-1202849.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'navy', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-06-20T10:00:00Z', onSale: false },
+            { id: 13, name: 'Slim-Fit Dress Shirt', price: 69.99, image: 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-05T10:00:00Z', onSale: false },
+            { id: 14, name: 'V-Neck T-Shirt', price: 34.99, image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-21T10:00:00Z', onSale: false },
+            { id: 19, name: 'Polo T-Shirt', price: 44.99, image: 'https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'blue', sizes: ['M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-14T10:00:00Z', onSale: false },
+            { id: 20, name: 'Track Pants', price: 59.99, image: 'https://images.pexels.com/photos/2080383/pexels-photo-2080383.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'trousers', color: 'grey', sizes: ['S', 'M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-10T10:00:00Z', onSale: false },
+            { id: 30, name: 'Slim Fit Jeans', price: 99.99, image: 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jeans', color: 'blue', sizes: ['M', 'L'], pantSizes: [30, 32, 34], sleeveType: 'none', dateAdded: '2025-07-27T10:00:00Z', onSale: false },
+            { id: 31, name: 'Casual Blazer', price: 149.99, image: 'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'blazer', color: 'grey', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
+            { id: 32, name: 'Flannel Shirt', price: 64.99, image: 'https://images.pexels.com/photos/3755706/pexels-photo-3755706.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'red', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-25T10:00:00Z', onSale: false },
+            { id: 33, name: 'Cargo Pants', price: 74.99, image: 'https://images.pexels.com/photos/776334/pexels-photo-776334.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'trousers', color: 'green', sizes: ['M', 'L'], pantSizes: [30, 32, 34, 36], sleeveType: 'none', dateAdded: '2025-07-24T10:00:00Z', onSale: false },
+            { id: 34, name: 'Denim Jacket', price: 119.99, image: 'https://images.pexels.com/photos/1337477/pexels-photo-1337477.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'blue', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
+            { id: 35, name: 'Linen Shirt', price: 59.99, image: 'https://images.pexels.com/photos/3765725/pexels-photo-3765725.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
+            { id: 36, name: 'Bomber Jacket', price: 139.99, salePrice: 99.99, image: 'https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'black', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-21T10:00:00Z', onSale: true },
+            // Kids (15 items)
+            { id: 7, name: 'Kids Dino T-Shirt', price: 19.99, image: 'https://images.pexels.com/photos/6955172/pexels-photo-6955172.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'tshirt', color: 'green', sizes: ['S', 'M'], sleeveType: 'half', dateAdded: '2025-07-17T10:00:00Z', onSale: false },
+            { id: 15, name: 'Bright Yellow Raincoat', price: 45.99, image: 'https://images.pexels.com/photos/459957/pexels-photo-459957.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jacket', color: 'yellow', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-01T10:00:00Z', onSale: false },
+            { id: 16, name: 'Denim Overalls', price: 55.99, salePrice: 39.99, image: 'https://images.pexels.com/photos/1619801/pexels-photo-1619801.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jeans', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [24, 26], sleeveType: 'none', dateAdded: '2025-07-12T10:00:00Z', onSale: true },
+            { id: 17, name: 'Cozy Fleece Pullover', price: 39.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'sweater', color: 'blue', sizes: ['S', 'M'], sleeveType: 'full', dateAdded: '2025-07-08T10:00:00Z', onSale: false },
+            { id: 37, name: 'Graphic Print Sweatshirt', price: 34.99, image: 'https://images.pexels.com/photos/6207818/pexels-photo-6207818.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'sweater', color: 'grey', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-27T10:00:00Z', onSale: false },
+            { id: 38, name: 'Cargo Shorts', price: 29.99, image: 'https://images.pexels.com/photos/5623675/pexels-photo-5623675.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'shorts', color: 'beige', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
+            { id: 39, name: 'Polo Shirt', price: 24.99, image: 'https://images.pexels.com/photos/6255223/pexels-photo-6255223.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'tshirt', color: 'red', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-25T10:00:00Z', onSale: false },
+            { id: 40, name: 'Hooded Windbreaker', price: 49.99, image: 'https://images.pexels.com/photos/1068244/pexels-photo-1068244.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jacket', color: 'blue', sizes: ['M', 'L'], sleeveType: 'full', dateAdded: '2025-07-24T10:00:00Z', onSale: false },
+            { id: 41, name: 'Jogger Pants', price: 34.99, image: 'https://images.pexels.com/photos/5560136/pexels-photo-5560136.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'trousers', color: 'black', sizes: ['S', 'M', 'L'], pantSizes: [24, 26, 28], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
+            { id: 42, name: 'Character Pajama Set', price: 29.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'pajamas', color: 'multi', sizes: ['S', 'M'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
+            { id: 43, name: 'Tutu Skirt', price: 29.99, image: 'https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'skirt', color: 'pink', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-21T10:00:00Z', onSale: false },
+            { id: 44, name: 'Button-Down Shirt', price: 34.99, image: 'https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'shirt', color: 'blue', sizes: ['M', 'L'], sleeveType: 'full', dateAdded: '2025-07-20T10:00:00Z', onSale: false },
+            { id: 45, name: 'Leggings', price: 19.99, salePrice: 14.99, image: 'https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'trousers', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: true },
+            { id: 46, name: 'Sun Hat', price: 14.99, image: 'https://images.pexels.com/photos/1599321/pexels-photo-1599321.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'accessory', color: 'beige', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-18T10:00:00Z', onSale: false },
+            { id: 47, name: 'Knit Beanie', price: 19.99, image: 'https://images.pexels.com/photos/1526920/pexels-photo-1526920.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'accessory', color: 'grey', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-17T10:00:00Z', onSale: false },
         ];
+
 
         // --- TEMPLATES ---
         const templates = {
@@ -372,9 +443,56 @@
             category: `
                 <div id="page-category" class="page">
                     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                        <h1 id="category-title" class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8"></h1>
+                        <div class="flex justify-between items-center mb-8">
+                            <h1 id="category-title" class="text-4xl font-extrabold tracking-tight text-gray-900"></h1>
+                             <div class="flex items-center gap-4">
+                                <select id="sort-by" class="p-2 border rounded-lg bg-white shadow-sm">
+                                    <option value="newest">Sort: Newest</option>
+                                    <option value="price-asc">Sort: Price Low to High</option>
+                                    <option value="price-desc">Sort: Price High to Low</option>
+                                </select>
+                                <button id="open-filters-btn" class="btn-secondary py-2 px-4 rounded-lg flex items-center">
+                                    <i class="fas fa-filter mr-2"></i>
+                                    <span>Filters</span>
+                                </button>
+                            </div>
+                        </div>
                         <div id="category-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"></div>
                     </div>
+                    <!-- Filter Modal/Sidebar -->
+                    <div id="filter-backdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+                    <aside id="filter-sidebar" class="fixed top-0 left-0 h-full w-80 bg-white p-6 shadow-lg z-50 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold">Filters</h2>
+                            <button id="close-filters-btn" class="text-2xl p-2">&times;</button>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="font-semibold mb-2">Sleeve Type</h3>
+                                <div class="space-y-2" id="filter-sleeveType"><label class="flex items-center"><input type="checkbox" value="full" class="mr-2"> Full Sleeve</label><label class="flex items-center"><input type="checkbox" value="half" class="mr-2"> Half Sleeve</label><label class="flex items-center"><input type="checkbox" value="none" class="mr-2"> Sleeveless</label></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Color</h3>
+                                <div class="flex flex-wrap gap-2" id="filter-color"><div class="filter-color-swatch" data-color="black" style="background-color: black;"></div><div class="filter-color-swatch" data-color="white" style="background-color: white; border: 1px solid #ccc"></div><div class="filter-color-swatch" data-color="blue" style="background-color: blue;"></div><div class="filter-color-swatch" data-color="red" style="background-color: red;"></div><div class="filter-color-swatch" data-color="green" style="background-color: green;"></div><div class="filter-color-swatch" data-color="grey" style="background-color: grey;"></div><div class="filter-color-swatch" data-color="beige" style="background-color: beige;"></div><div class="filter-color-swatch" data-color="pink" style="background-color: pink;"></div><div class="filter-color-swatch" data-color="yellow" style="background-color: yellow;"></div><div class="filter-color-swatch" data-color="navy" style="background-color: navy;"></div></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Size</h3>
+                                <div class="flex flex-wrap gap-2" id="filter-sizes"><button class="filter-size-button px-3 py-1 border rounded-full">S</button><button class="filter-size-button px-3 py-1 border rounded-full">M</button><button class="filter-size-button px-3 py-1 border rounded-full">L</button><button class="filter-size-button px-3 py-1 border rounded-full">XL</button></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Pant Size</h3>
+                                <div class="flex flex-wrap gap-2" id="filter-pantSizes"><button class="filter-size-button px-3 py-1 border rounded-full">26</button><button class="filter-size-button px-3 py-1 border rounded-full">28</button><button class="filter-size-button px-3 py-1 border rounded-full">30</button><button class="filter-size-button px-3 py-1 border rounded-full">32</button><button class="filter-size-button px-3 py-1 border rounded-full">34</button><button class="filter-size-button px-3 py-1 border rounded-full">36</button></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Price Range</h3>
+                                <div class="space-y-2" id="filter-price"><label class="flex items-center"><input type="checkbox" value="0-50" class="mr-2"> $0 - $50</label><label class="flex items-center"><input type="checkbox" value="50-100" class="mr-2"> $50 - $100</label><label class="flex items-center"><input type="checkbox" value="100-10000" class="mr-2"> $100+</label></div>
+                            </div>
+                        </div>
+                        <div class="mt-8 pt-6 border-t">
+                            <button id="apply-filters-btn" class="w-full btn-primary py-2 rounded-lg mb-2">Apply Filters</button>
+                            <button id="clear-filters-btn" class="w-full btn-secondary py-2 rounded-lg">Clear Filters</button>
+                        </div>
+                    </aside>
                 </div>`,
             product: `
                 <div id="page-product" class="page">
@@ -462,6 +580,64 @@
                             </form>
                         </div>
                     </div>
+                </div>`,
+            about: `
+                <div id="page-about" class="page">
+                    <div class="container mx-auto px-4 py-16">
+                        <h1 class="text-4xl font-extrabold text-center mb-4">About YCR</h1>
+                        <p class="text-center text-gray-600 mb-12">You Create Reality</p>
+                        <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                            <p class="text-lg text-gray-700 mb-4">At YCR, we believe that fashion is a form of self-expression. Our name, 'You Create Reality,' is a testament to the power of the individual to shape their world through their choices, their style, and their creativity.</p>
+                            <p class="text-gray-700 mb-4">Founded in 2024, YCR was born from a desire to create high-quality, designer apparel that is both timeless and modern. We are committed to sustainable practices, ethical sourcing, and creating pieces that you will love for years to come.</p>
+                            <p class="text-gray-700">Thank you for being a part of our journey.</p>
+                        </div>
+                    </div>
+                </div>`,
+            contact: `
+                <div id="page-contact" class="page">
+                    <div class="container mx-auto px-4 py-16">
+                        <h1 class="text-4xl font-extrabold text-center mb-4">Contact Us</h1>
+                        <p class="text-center text-gray-600 mb-12">We'd love to hear from you!</p>
+                        <div class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                            <form>
+                                <div class="mb-4">
+                                    <label for="name" class="block text-gray-700 font-bold mb-2">Name</label>
+                                    <input type="text" id="name" class="w-full p-3 border rounded-lg" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
+                                    <input type="email" id="email" class="w-full p-3 border rounded-lg" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="message" class="block text-gray-700 font-bold mb-2">Message</label>
+                                    <textarea id="message" rows="5" class="w-full p-3 border rounded-lg" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary w-full py-3 rounded-lg">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>`,
+            customize: `
+                <div id="page-customize" class="page">
+                     <div class="container mx-auto px-4 py-12">
+                        <h1 class="text-4xl font-extrabold text-center mb-4">Design Your Own T-Shirt</h1>
+                        <p class="text-center text-gray-600 mb-12">Upload your photo and see it come to life.</p>
+                        <div class="grid md:grid-cols-2 gap-12 items-center">
+                            <div class="flex flex-col items-center">
+                                <div id="tshirt-design-preview" class="mb-4 rounded-lg shadow-lg">
+                                    <img id="tshirt-image" src="https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=800" alt="White T-Shirt">
+                                    <div id="uploaded-image-preview"></div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-8 rounded-lg shadow-lg">
+                                <h2 class="text-2xl font-bold mb-4">Customize Your Design</h2>
+                                <p class="mb-4 text-gray-600">Click below to upload your image. PNG files with transparent backgrounds work best!</p>
+                                <input type="file" id="image-uploader" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
+                                <p class="text-xs text-gray-500 mt-2">Max file size: 5MB.</p>
+                                <button id="add-custom-to-cart-btn" class="btn-primary w-full py-3 text-lg rounded-lg shadow-md mt-8">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>`
         };
         
@@ -469,14 +645,13 @@
         const mainContent = document.getElementById('main-content');
         
         window.navigateTo = (pageId, params = {}) => {
-            clearInterval(sliderInterval); // Clear slider timer on page change
+            clearInterval(sliderInterval); 
             const pageTemplate = templates[pageId];
             if (pageTemplate) {
                 mainContent.innerHTML = pageTemplate;
                 const pageElement = mainContent.querySelector('.page');
                 if(pageElement) pageElement.classList.add('active');
 
-                // Page-specific initializers
                 if (pageId === 'home') renderHomePage();
                 else if (pageId === 'category') renderCategoryPage(params.category);
                 else if (pageId === 'product') renderProductPage(params.productId);
@@ -485,6 +660,7 @@
                 else if (pageId === 'login') initLoginForm();
                 else if (pageId === 'signup') initSignupForm();
                 else if (pageId === 'admin') checkAdminAccess();
+                else if (pageId === 'customize') initCustomizePage();
             } else {
                  mainContent.innerHTML = `<div class="p-8 text-center"><h2>404 - Page Not Found</h2></div>`;
             }
@@ -494,42 +670,171 @@
         function renderHomePage() {
             const container = document.getElementById('home-products');
             if(container) {
-                container.innerHTML = products.slice(0,4).map(createProductCard).join('');
+                // A curated list of 12 featured products
+                const featuredIds = [1, 2, 11, 7, 4, 6, 19, 18, 15, 5, 9, 20];
+                const featuredProducts = products.filter(p => featuredIds.includes(p.id));
+                container.innerHTML = featuredProducts.map(createProductCard).join('');
             }
             initSlider();
         }
         
         function renderCategoryPage(category) {
+            currentCategory = category;
             const titleEl = document.getElementById('category-title');
-            const containerEl = document.getElementById('category-products');
             if(titleEl) titleEl.textContent = category;
             
-            if(containerEl) {
-                let filteredProducts = products.filter(p => p.category === category);
-                if (category === 'Sale') {
-                     filteredProducts = [products[2], products[4], products[10], products[13]]; // Example sale items
+            applyFiltersAndSort();
+            setupFilterListeners();
+        }
+
+        function applyFiltersAndSort() {
+            let currentFilters = {};
+            const sortEl = document.getElementById('sort-by');
+            const currentSort = sortEl ? sortEl.value : 'newest';
+
+            // Build filters object from the form
+            const sleeveTypes = Array.from(document.querySelectorAll('#filter-sleeveType input:checked')).map(el => el.value);
+            if (sleeveTypes.length > 0) currentFilters.sleeveType = sleeveTypes;
+
+            const selectedColor = document.querySelector('#filter-color .filter-color-swatch.selected');
+            if (selectedColor) currentFilters.color = selectedColor.dataset.color;
+
+            const sizes = Array.from(document.querySelectorAll('#filter-sizes button.selected')).map(el => el.textContent);
+            if (sizes.length > 0) currentFilters.sizes = sizes;
+
+            const pantSizes = Array.from(document.querySelectorAll('#filter-pantSizes button.selected')).map(el => el.textContent);
+            if (pantSizes.length > 0) currentFilters.pantSizes = pantSizes;
+            
+            const prices = Array.from(document.querySelectorAll('#filter-price input:checked')).map(el => el.value);
+            if (prices.length > 0) currentFilters.price = prices;
+
+            let filteredProducts;
+            if (currentCategory === 'Sale') {
+                filteredProducts = products.filter(p => p.onSale);
+            } else {
+                filteredProducts = products.filter(p => p.category === currentCategory);
+            }
+            
+            // Apply filters
+            if (currentFilters.sleeveType) {
+                filteredProducts = filteredProducts.filter(p => currentFilters.sleeveType.includes(p.sleeveType));
+            }
+             if (currentFilters.color) {
+                filteredProducts = filteredProducts.filter(p => p.color === currentFilters.color);
+            }
+            if (currentFilters.sizes) {
+                filteredProducts = filteredProducts.filter(p => p.sizes && p.sizes.some(s => currentFilters.sizes.includes(s)));
+            }
+             if (currentFilters.pantSizes) {
+                filteredProducts = filteredProducts.filter(p => p.pantSizes && p.pantSizes.some(s => currentFilters.pantSizes.includes(s.toString())));
+            }
+            if (currentFilters.price) {
+                filteredProducts = filteredProducts.filter(p => {
+                    return currentFilters.price.some(range => {
+                        const [min, max] = range.split('-').map(Number);
+                        return p.price >= min && p.price <= max;
+                    });
+                });
+            }
+
+            // Apply sorting
+            if (currentSort === 'price-asc') {
+                filteredProducts.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
+            } else if (currentSort === 'price-desc') {
+                filteredProducts.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
+            } else { // newest
+                filteredProducts.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+            }
+
+            const containerEl = document.getElementById('category-products');
+            if (containerEl) {
+                if (filteredProducts.length > 0) {
+                    containerEl.innerHTML = filteredProducts.map(createProductCard).join('');
+                } else {
+                    containerEl.innerHTML = `<p class="col-span-full text-center text-gray-500">No products match the selected filters.</p>`;
                 }
-                containerEl.innerHTML = filteredProducts.map(createProductCard).join('');
             }
         }
+
+        function setupFilterListeners() {
+            const openBtn = document.getElementById('open-filters-btn');
+            const closeBtn = document.getElementById('close-filters-btn');
+            const backdrop = document.getElementById('filter-backdrop');
+            const sidebar = document.getElementById('filter-sidebar');
+            const applyBtn = document.getElementById('apply-filters-btn');
+            const clearBtn = document.getElementById('clear-filters-btn');
+
+            const openFilters = () => {
+                backdrop.classList.remove('hidden');
+                sidebar.classList.remove('-translate-x-full');
+            };
+            const closeFilters = () => {
+                backdrop.classList.add('hidden');
+                sidebar.classList.add('-translate-x-full');
+            };
+
+            openBtn.addEventListener('click', openFilters);
+            closeBtn.addEventListener('click', closeFilters);
+            backdrop.addEventListener('click', closeFilters);
+            
+            applyBtn.addEventListener('click', () => {
+                applyFiltersAndSort();
+                closeFilters();
+            });
+
+            clearBtn.addEventListener('click', () => {
+                document.querySelectorAll('#filter-sidebar input[type="checkbox"]').forEach(el => el.checked = false);
+                document.querySelectorAll('#filter-sidebar button.selected').forEach(el => el.classList.remove('selected', 'bg-gray-800', 'text-white'));
+                document.querySelectorAll('#filter-sidebar .filter-color-swatch.selected').forEach(el => el.classList.remove('selected'));
+                applyFiltersAndSort();
+                closeFilters();
+            });
+
+            document.getElementById('sort-by').addEventListener('change', applyFiltersAndSort);
+            
+            document.querySelectorAll('#filter-color .filter-color-swatch').forEach(swatch => {
+                swatch.addEventListener('click', e => {
+                    const isSelected = e.target.classList.contains('selected');
+                    document.querySelectorAll('#filter-color .filter-color-swatch').forEach(s => s.classList.remove('selected'));
+                    if (!isSelected) {
+                        e.target.classList.add('selected');
+                    }
+                });
+            });
+
+            document.querySelectorAll('#filter-sizes button, #filter-pantSizes button').forEach(button => {
+                button.addEventListener('click', e => {
+                    e.target.classList.toggle('selected');
+                    e.target.classList.toggle('bg-gray-800');
+                    e.target.classList.toggle('text-white');
+                });
+            });
+        }
+
 
         function renderProductPage(productId) {
             const product = products.find(p => p.id === productId);
             if (!product) return;
             document.getElementById('product-detail-image').src = product.image;
             document.getElementById('product-detail-name').textContent = product.name;
-            document.getElementById('product-detail-price').textContent = `$${product.price}`;
+            const priceHtml = product.onSale 
+                ? `<span class="text-red-600">$${product.salePrice.toFixed(2)}</span> <span class="text-gray-500 line-through ml-2">$${product.price.toFixed(2)}</span>`
+                : `$${product.price.toFixed(2)}`;
+            document.getElementById('product-detail-price').innerHTML = priceHtml;
             document.getElementById('product-detail-description').textContent = product.description;
             document.getElementById('add-to-cart-btn').onclick = () => addToCart(product);
         }
 
         function createProductCard(product) {
+            const priceHtml = product.onSale 
+                ? `<p class="mt-1 text-lg font-semibold text-red-600">$${product.salePrice.toFixed(2)} <span class="text-gray-500 line-through ml-2">$${product.price.toFixed(2)}</span></p>`
+                : `<p class="mt-1 text-lg font-semibold text-gray-900">$${product.price.toFixed(2)}</p>`;
             return `
                 <div class="product-card group cursor-pointer" onclick="window.navigateTo('product', { productId: ${product.id} })">
                     <div class="product-image-container"><img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x500.png/cccccc/FFFFFF?text=Image+Error';"></div>
                     <div class="mt-4">
                         <h3 class="text-sm text-gray-700 font-medium">${product.name}</h3>
-                        <p class="mt-1 text-lg font-semibold text-gray-900">$${product.price}</p>
+                        ${priceHtml}
                     </div>
                 </div>`;
         }
@@ -572,6 +877,27 @@
 
             resetSliderInterval();
         }
+        
+        // --- CUSTOMIZER ---
+        function initCustomizePage() {
+            const uploader = document.getElementById('image-uploader');
+            const preview = document.getElementById('uploaded-image-preview');
+            uploader.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        preview.style.backgroundImage = `url('${event.target.result}')`;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            document.getElementById('add-custom-to-cart-btn').onclick = () => {
+                const product = {id: 99, name: 'Custom T-Shirt', price: 35.00, image: 'https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=800'};
+                addToCart(product);
+            };
+        }
+
 
         // --- AUTHENTICATION ---
         function setupAuthListener() {
@@ -696,7 +1022,7 @@
                 return;
             }
 
-            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.salePrice || item.price) * item.quantity, 0);
             const shipping = 5.00;
             const total = subtotal + shipping;
 
@@ -712,7 +1038,7 @@
                                     <button class="text-red-500 text-sm hover:underline" onclick="window.removeFromCart(${index})">Remove</button>
                                 </div>
                             </div>
-                            <p class="font-semibold w-24 text-right">$${(item.price * item.quantity).toFixed(2)}</p>
+                            <p class="font-semibold w-24 text-right">$${((item.salePrice || item.price) * item.quantity).toFixed(2)}</p>
                         </div>
                     `).join('')}
                 </div>
