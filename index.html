@@ -109,9 +109,11 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            pointer-events: none;
         }
         .slide.active {
             opacity: 1;
+            pointer-events: auto;
         }
         .slide-image {
             width: 100%;
@@ -139,26 +141,92 @@
             height: 3rem;
             font-size: 1.5rem;
         }
-         #tshirt-design-preview {
+        /* Customizer Styles */
+        #design-canvas {
             position: relative;
-            width: 400px;
-            height: 500px;
-        }
-        #tshirt-image {
             width: 100%;
             height: 100%;
+            overflow: hidden;
         }
-        #uploaded-image-preview {
+        #tshirt-image-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        .design-element {
             position: absolute;
-            top: 100px;
-            left: 125px;
-            width: 150px;
-            height: 150px;
+            cursor: move;
+            border: 2px dashed transparent;
+            transition: border-color 0.2s;
+        }
+        .design-element.selected {
+            border-color: #3b82f6;
+            z-index: 100;
+        }
+        .design-element .resizer {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border: 1px solid white;
+            border-radius: 50%;
+            cursor: se-resize;
+            bottom: -6px;
+            right: -6px;
+            display: none;
+        }
+        .design-element .rotator {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #f59e0b;
+            border: 1px solid white;
+            border-radius: 50%;
+            cursor: grab;
+            top: -6px;
+            right: -6px;
+            display: none;
+        }
+        .design-element .delete-btn {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            color: white;
+            border: 1px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            top: -8px;
+            left: -8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        .design-element.selected .resizer,
+        .design-element.selected .rotator,
+        .design-element.selected .delete-btn {
+            display: flex;
+        }
+        .design-element .element-content {
+            width: 100%;
+            height: 100%;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            cursor: move;
-            border: 2px dashed #ccc;
+            color: black;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5px;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Standard syntax */
         }
         .filter-color-swatch {
             width: 24px;
@@ -316,55 +384,55 @@
         // --- DATA ---
         const products = [
              // Women (16 items)
-            { id: 2, name: 'High-Waisted Skinny Jeans', price: 89.99, image: 'https://images.pexels.com/photos/1035649/pexels-photo-1035649.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jeans', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-20T10:00:00Z', onSale: false },
-            { id: 3, name: 'Cozy Knit Sweater', price: 79.99, salePrice: 59.99, image: 'https://images.pexels.com/photos/6770028/pexels-photo-6770028.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'sweater', color: 'beige', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-18T10:00:00Z', onSale: true },
-            { id: 6, name: 'Floral Sundress', price: 99.99, image: 'https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'dress', color: 'red', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
-            { id: 9, name: 'Elegant Business Blazer', price: 129.99, image: 'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'blazer', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-15T10:00:00Z', onSale: false },
-            { id: 10, name: 'Silk Camisole Top', price: 49.99, salePrice: 34.99, image: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'top', color: 'pink', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-25T10:00:00Z', onSale: true },
-            { id: 11, name: 'Leather Moto Jacket', price: 249.99, image: 'https://images.pexels.com/photos/1909791/pexels-photo-1909791.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jacket', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-06-30T10:00:00Z', onSale: false },
-            { id: 18, name: 'Wide-Leg Trousers', price: 79.99, image: 'https://images.pexels.com/photos/7142337/pexels-photo-7142337.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'green', sizes: ['M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-11T10:00:00Z', onSale: false },
-            { id: 21, name: 'V-Neck Tee', price: 24.99, image: 'https://images.pexels.com/photos/2010877/pexels-photo-2010877.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'tshirt', color: 'white', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-27T10:00:00Z', onSale: false },
-            { id: 22, name: 'Denim Shorts', price: 59.99, image: 'https://images.pexels.com/photos/159888/fashion-hand-bag-stylish-costume-159888.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'shorts', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
-            { id: 23, name: 'Polo Shirt Dress', price: 89.99, image: 'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'dress', color: 'pink', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-25T10:00:00Z', onSale: false },
-            { id: 24, name: 'Athletic Track Pants', price: 69.99, image: 'https://images.pexels.com/photos/4132641/pexels-photo-4132641.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'grey', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-24T10:00:00Z', onSale: false },
-            { id: 25, name: 'Boyfriend Jeans', price: 99.99, image: 'https://images.pexels.com/photos/1642228/pexels-photo-1642228.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jeans', color: 'blue', sizes: ['M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
-            { id: 26, name: 'Formal Blouse', price: 59.99, image: 'https://images.pexels.com/photos/3771836/pexels-photo-3771836.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
-            { id: 27, name: 'Oversized Hoodie', price: 79.99, image: 'https://images.pexels.com/photos/7018391/pexels-photo-7018391.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'hoodie', color: 'black', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-21T10:00:00Z', onSale: false },
-            { id: 28, name: 'Linen Pants', price: 69.99, image: 'https://images.pexels.com/photos/4955331/pexels-photo-4955331.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'beige', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-20T10:00:00Z', onSale: false },
-            { id: 29, name: 'Puffer Vest', price: 89.99, image: 'https://images.pexels.com/photos/6765439/pexels-photo-6765439.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jacket', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: false },
+            { id: 2, name: 'High-Waisted Skinny Jeans', price: 89.99, image: 'https://images.pexels.com/photos/1035649/pexels-photo-1035649.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jeans', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-20T10:00:00Z', onSale: false, tags: ['denim'] },
+            { id: 3, name: 'Cozy Knit Sweater', price: 79.99, salePrice: 59.99, image: 'https://images.pexels.com/photos/6770028/pexels-photo-6770028.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'sweater', color: 'beige', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-18T10:00:00Z', onSale: true, tags: [] },
+            { id: 6, name: 'Floral Sundress', price: 99.99, image: 'https://images.pexels.com/photos/1755428/pexels-photo-1755428.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'dress', color: 'red', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-22T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 9, name: 'Elegant Business Blazer', price: 129.99, image: 'https://images.pexels.com/photos/2613260/pexels-photo-2613260.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'blazer', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-15T10:00:00Z', onSale: false, tags: [] },
+            { id: 10, name: 'Silk Camisole Top', price: 49.99, salePrice: 34.99, image: 'https://images.pexels.com/photos/3772510/pexels-photo-3772510.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'top', color: 'pink', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-25T10:00:00Z', onSale: true, tags: ['summer'] },
+            { id: 11, name: 'Leather Moto Jacket', price: 249.99, image: 'https://images.pexels.com/photos/1909791/pexels-photo-1909791.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jacket', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-06-30T10:00:00Z', onSale: false, tags: [] },
+            { id: 18, name: 'Wide-Leg Trousers', price: 79.99, image: 'https://images.pexels.com/photos/7142337/pexels-photo-7142337.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'green', sizes: ['M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-11T10:00:00Z', onSale: false, tags: [] },
+            { id: 21, name: 'V-Neck Tee', price: 24.99, image: 'https://images.pexels.com/photos/2010877/pexels-photo-2010877.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'tshirt', color: 'white', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-27T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 22, name: 'Denim Shorts', price: 59.99, image: 'https://images.pexels.com/photos/159888/fashion-hand-bag-stylish-costume-159888.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'shorts', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-26T10:00:00Z', onSale: false, tags: ['summer', 'denim'] },
+            { id: 23, name: 'Polo Shirt Dress', price: 89.99, image: 'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'dress', color: 'pink', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-25T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 24, name: 'Athletic Track Pants', price: 69.99, image: 'https://images.pexels.com/photos/4132641/pexels-photo-4132641.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'grey', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-24T10:00:00Z', onSale: false, tags: [] },
+            { id: 25, name: 'Boyfriend Jeans', price: 99.99, image: 'https://images.pexels.com/photos/1642228/pexels-photo-1642228.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jeans', color: 'blue', sizes: ['M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false, tags: ['denim'] },
+            { id: 26, name: 'Formal Blouse', price: 59.99, image: 'https://images.pexels.com/photos/3771836/pexels-photo-3771836.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false, tags: [] },
+            { id: 27, name: 'Oversized Hoodie', price: 79.99, image: 'https://images.pexels.com/photos/7018391/pexels-photo-7018391.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'hoodie', color: 'black', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-21T10:00:00Z', onSale: false, tags: [] },
+            { id: 28, name: 'Linen Pants', price: 69.99, image: 'https://images.pexels.com/photos/4955331/pexels-photo-4955331.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'trousers', color: 'beige', sizes: ['S', 'M', 'L'], pantSizes: [26, 28, 30], sleeveType: 'none', dateAdded: '2025-07-20T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 29, name: 'Puffer Vest', price: 89.99, image: 'https://images.pexels.com/photos/6765439/pexels-photo-6765439.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Women', type: 'jacket', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: false, tags: [] },
             // Men (16 items)
-            { id: 1, name: 'Classic Crewneck Tee', price: 29.99, image: 'https://images.pexels.com/photos/991509/pexels-photo-991509.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'black', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
-            { id: 4, name: 'Modern Fit Chinos', price: 69.99, image: 'https://images.pexels.com/photos/8393930/pexels-photo-8393930.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'chinos', color: 'beige', sizes: ['M', 'L'], pantSizes: [30, 32, 34, 36], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: false },
-            { id: 5, name: 'Graphic Print Hoodie', price: 59.99, salePrice: 45.00, image: 'https://images.pexels.com/photos/5061246/pexels-photo-5061246.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'hoodie', color: 'grey', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-24T10:00:00Z', onSale: true },
-            { id: 8, name: 'Sport Performance Shorts', price: 49.99, image: 'https://images.pexels.com/photos/3768025/pexels-photo-3768025.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shorts', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
-            { id: 12, name: 'Wool Peacoat', price: 299.99, image: 'https://images.pexels.com/photos/1202849/pexels-photo-1202849.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'navy', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-06-20T10:00:00Z', onSale: false },
-            { id: 13, name: 'Slim-Fit Dress Shirt', price: 69.99, image: 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-05T10:00:00Z', onSale: false },
-            { id: 14, name: 'V-Neck T-Shirt', price: 34.99, image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-21T10:00:00Z', onSale: false },
-            { id: 19, name: 'Polo T-Shirt', price: 44.99, image: 'https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'blue', sizes: ['M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-14T10:00:00Z', onSale: false },
-            { id: 20, name: 'Track Pants', price: 59.99, image: 'https://images.pexels.com/photos/2080383/pexels-photo-2080383.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'trousers', color: 'grey', sizes: ['S', 'M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-10T10:00:00Z', onSale: false },
-            { id: 30, name: 'Slim Fit Jeans', price: 99.99, image: 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jeans', color: 'blue', sizes: ['M', 'L'], pantSizes: [30, 32, 34], sleeveType: 'none', dateAdded: '2025-07-27T10:00:00Z', onSale: false },
-            { id: 31, name: 'Casual Blazer', price: 149.99, image: 'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'blazer', color: 'grey', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
-            { id: 32, name: 'Flannel Shirt', price: 64.99, image: 'https://images.pexels.com/photos/3755706/pexels-photo-3755706.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'red', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-25T10:00:00Z', onSale: false },
-            { id: 33, name: 'Cargo Pants', price: 74.99, image: 'https://images.pexels.com/photos/776334/pexels-photo-776334.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'trousers', color: 'green', sizes: ['M', 'L'], pantSizes: [30, 32, 34, 36], sleeveType: 'none', dateAdded: '2025-07-24T10:00:00Z', onSale: false },
-            { id: 34, name: 'Denim Jacket', price: 119.99, image: 'https://images.pexels.com/photos/1337477/pexels-photo-1337477.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'blue', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
-            { id: 35, name: 'Linen Shirt', price: 59.99, image: 'https://images.pexels.com/photos/3765725/pexels-photo-3765725.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
-            { id: 36, name: 'Bomber Jacket', price: 139.99, salePrice: 99.99, image: 'https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'black', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-21T10:00:00Z', onSale: true },
+            { id: 1, name: 'Classic Crewneck Tee', price: 29.99, image: 'https://images.pexels.com/photos/991509/pexels-photo-991509.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'black', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-26T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 4, name: 'Modern Fit Chinos', price: 69.99, image: 'https://images.pexels.com/photos/8393930/pexels-photo-8393930.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'chinos', color: 'beige', sizes: ['M', 'L'], pantSizes: [30, 32, 34, 36], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: false, tags: [] },
+            { id: 5, name: 'Graphic Print Hoodie', price: 59.99, salePrice: 45.00, image: 'https://images.pexels.com/photos/5061246/pexels-photo-5061246.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'hoodie', color: 'grey', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-24T10:00:00Z', onSale: true, tags: [] },
+            { id: 8, name: 'Sport Performance Shorts', price: 49.99, image: 'https://images.pexels.com/photos/3768025/pexels-photo-3768025.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shorts', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 12, name: 'Wool Peacoat', price: 299.99, image: 'https://images.pexels.com/photos/1202849/pexels-photo-1202849.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'navy', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-06-20T10:00:00Z', onSale: false, tags: [] },
+            { id: 13, name: 'Slim-Fit Dress Shirt', price: 69.99, image: 'https://images.pexels.com/photos/297933/pexels-photo-297933.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-05T10:00:00Z', onSale: false, tags: [] },
+            { id: 14, name: 'V-Neck T-Shirt', price: 34.99, image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-21T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 19, name: 'Polo T-Shirt', price: 44.99, image: 'https://images.pexels.com/photos/845434/pexels-photo-845434.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'tshirt', color: 'blue', sizes: ['M', 'L', 'XL'], sleeveType: 'half', dateAdded: '2025-07-14T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 20, name: 'Track Pants', price: 59.99, image: 'https://images.pexels.com/photos/2080383/pexels-photo-2080383.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'trousers', color: 'grey', sizes: ['S', 'M', 'L'], pantSizes: [28, 30, 32], sleeveType: 'none', dateAdded: '2025-07-10T10:00:00Z', onSale: false, tags: [] },
+            { id: 30, name: 'Slim Fit Jeans', price: 99.99, image: 'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jeans', color: 'blue', sizes: ['M', 'L'], pantSizes: [30, 32, 34], sleeveType: 'none', dateAdded: '2025-07-27T10:00:00Z', onSale: false, tags: ['denim'] },
+            { id: 31, name: 'Casual Blazer', price: 149.99, image: 'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'blazer', color: 'grey', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-26T10:00:00Z', onSale: false, tags: [] },
+            { id: 32, name: 'Flannel Shirt', price: 64.99, image: 'https://images.pexels.com/photos/3755706/pexels-photo-3755706.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'red', sizes: ['S', 'M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-25T10:00:00Z', onSale: false, tags: [] },
+            { id: 33, name: 'Cargo Pants', price: 74.99, image: 'https://images.pexels.com/photos/776334/pexels-photo-776334.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'trousers', color: 'green', sizes: ['M', 'L'], pantSizes: [30, 32, 34, 36], sleeveType: 'none', dateAdded: '2025-07-24T10:00:00Z', onSale: false, tags: [] },
+            { id: 34, name: 'Denim Jacket', price: 119.99, image: 'https://images.pexels.com/photos/1337477/pexels-photo-1337477.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'blue', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-23T10:00:00Z', onSale: false, tags: ['denim'] },
+            { id: 35, name: 'Linen Shirt', price: 59.99, image: 'https://images.pexels.com/photos/3765725/pexels-photo-3765725.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'shirt', color: 'white', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 36, name: 'Bomber Jacket', price: 139.99, salePrice: 99.99, image: 'https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Men', type: 'jacket', color: 'black', sizes: ['M', 'L', 'XL'], sleeveType: 'full', dateAdded: '2025-07-21T10:00:00Z', onSale: true, tags: [] },
             // Kids (15 items)
-            { id: 7, name: 'Kids Dino T-Shirt', price: 19.99, image: 'https://images.pexels.com/photos/6955172/pexels-photo-6955172.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'tshirt', color: 'green', sizes: ['S', 'M'], sleeveType: 'half', dateAdded: '2025-07-17T10:00:00Z', onSale: false },
-            { id: 15, name: 'Bright Yellow Raincoat', price: 45.99, image: 'https://images.pexels.com/photos/459957/pexels-photo-459957.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jacket', color: 'yellow', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-01T10:00:00Z', onSale: false },
-            { id: 16, name: 'Denim Overalls', price: 55.99, salePrice: 39.99, image: 'https://images.pexels.com/photos/1619801/pexels-photo-1619801.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jeans', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [24, 26], sleeveType: 'none', dateAdded: '2025-07-12T10:00:00Z', onSale: true },
-            { id: 17, name: 'Cozy Fleece Pullover', price: 39.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'sweater', color: 'blue', sizes: ['S', 'M'], sleeveType: 'full', dateAdded: '2025-07-08T10:00:00Z', onSale: false },
-            { id: 37, name: 'Graphic Print Sweatshirt', price: 34.99, image: 'https://images.pexels.com/photos/6207818/pexels-photo-6207818.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'sweater', color: 'grey', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-27T10:00:00Z', onSale: false },
-            { id: 38, name: 'Cargo Shorts', price: 29.99, image: 'https://images.pexels.com/photos/5623675/pexels-photo-5623675.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'shorts', color: 'beige', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-26T10:00:00Z', onSale: false },
-            { id: 39, name: 'Polo Shirt', price: 24.99, image: 'https://images.pexels.com/photos/6255223/pexels-photo-6255223.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'tshirt', color: 'red', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-25T10:00:00Z', onSale: false },
-            { id: 40, name: 'Hooded Windbreaker', price: 49.99, image: 'https://images.pexels.com/photos/1068244/pexels-photo-1068244.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jacket', color: 'blue', sizes: ['M', 'L'], sleeveType: 'full', dateAdded: '2025-07-24T10:00:00Z', onSale: false },
-            { id: 41, name: 'Jogger Pants', price: 34.99, image: 'https://images.pexels.com/photos/5560136/pexels-photo-5560136.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'trousers', color: 'black', sizes: ['S', 'M', 'L'], pantSizes: [24, 26, 28], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false },
-            { id: 42, name: 'Character Pajama Set', price: 29.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'pajamas', color: 'multi', sizes: ['S', 'M'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false },
-            { id: 43, name: 'Tutu Skirt', price: 29.99, image: 'https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'skirt', color: 'pink', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-21T10:00:00Z', onSale: false },
-            { id: 44, name: 'Button-Down Shirt', price: 34.99, image: 'https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'shirt', color: 'blue', sizes: ['M', 'L'], sleeveType: 'full', dateAdded: '2025-07-20T10:00:00Z', onSale: false },
-            { id: 45, name: 'Leggings', price: 19.99, salePrice: 14.99, image: 'https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'trousers', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: true },
-            { id: 46, name: 'Sun Hat', price: 14.99, image: 'https://images.pexels.com/photos/1599321/pexels-photo-1599321.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'accessory', color: 'beige', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-18T10:00:00Z', onSale: false },
-            { id: 47, name: 'Knit Beanie', price: 19.99, image: 'https://images.pexels.com/photos/1526920/pexels-photo-1526920.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'accessory', color: 'grey', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-17T10:00:00Z', onSale: false },
+            { id: 7, name: 'Kids Dino T-Shirt', price: 19.99, image: 'https://images.pexels.com/photos/6955172/pexels-photo-6955172.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'tshirt', color: 'green', sizes: ['S', 'M'], sleeveType: 'half', dateAdded: '2025-07-17T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 15, name: 'Bright Yellow Raincoat', price: 45.99, image: 'https://images.pexels.com/photos/459957/pexels-photo-459957.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jacket', color: 'yellow', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-01T10:00:00Z', onSale: false, tags: [] },
+            { id: 16, name: 'Denim Overalls', price: 55.99, salePrice: 39.99, image: 'https://images.pexels.com/photos/1619801/pexels-photo-1619801.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jeans', color: 'blue', sizes: ['S', 'M', 'L'], pantSizes: [24, 26], sleeveType: 'none', dateAdded: '2025-07-12T10:00:00Z', onSale: true, tags: ['denim'] },
+            { id: 17, name: 'Cozy Fleece Pullover', price: 39.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'sweater', color: 'blue', sizes: ['S', 'M'], sleeveType: 'full', dateAdded: '2025-07-08T10:00:00Z', onSale: false, tags: [] },
+            { id: 37, name: 'Graphic Print Sweatshirt', price: 34.99, image: 'https://images.pexels.com/photos/6207818/pexels-photo-6207818.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'sweater', color: 'grey', sizes: ['S', 'M', 'L'], sleeveType: 'full', dateAdded: '2025-07-27T10:00:00Z', onSale: false, tags: [] },
+            { id: 38, name: 'Cargo Shorts', price: 29.99, image: 'https://images.pexels.com/photos/5623675/pexels-photo-5623675.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'shorts', color: 'beige', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-26T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 39, name: 'Polo Shirt', price: 24.99, image: 'https://images.pexels.com/photos/6255223/pexels-photo-6255223.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'tshirt', color: 'red', sizes: ['S', 'M', 'L'], sleeveType: 'half', dateAdded: '2025-07-25T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 40, name: 'Hooded Windbreaker', price: 49.99, image: 'https://images.pexels.com/photos/1068244/pexels-photo-1068244.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'jacket', color: 'blue', sizes: ['M', 'L'], sleeveType: 'full', dateAdded: '2025-07-24T10:00:00Z', onSale: false, tags: [] },
+            { id: 41, name: 'Jogger Pants', price: 34.99, image: 'https://images.pexels.com/photos/5560136/pexels-photo-5560136.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'trousers', color: 'black', sizes: ['S', 'M', 'L'], pantSizes: [24, 26, 28], sleeveType: 'none', dateAdded: '2025-07-23T10:00:00Z', onSale: false, tags: [] },
+            { id: 42, name: 'Character Pajama Set', price: 29.99, image: 'https://images.pexels.com/photos/7693356/pexels-photo-7693356.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'pajamas', color: 'multi', sizes: ['S', 'M'], sleeveType: 'full', dateAdded: '2025-07-22T10:00:00Z', onSale: false, tags: [] },
+            { id: 43, name: 'Tutu Skirt', price: 29.99, image: 'https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'skirt', color: 'pink', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-21T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 44, name: 'Button-Down Shirt', price: 34.99, image: 'https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'shirt', color: 'blue', sizes: ['M', 'L'], sleeveType: 'full', dateAdded: '2025-07-20T10:00:00Z', onSale: false, tags: [] },
+            { id: 45, name: 'Leggings', price: 19.99, salePrice: 14.99, image: 'https://images.pexels.com/photos/4056535/pexels-photo-4056535.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'trousers', color: 'black', sizes: ['S', 'M', 'L'], sleeveType: 'none', dateAdded: '2025-07-19T10:00:00Z', onSale: true, tags: [] },
+            { id: 46, name: 'Sun Hat', price: 14.99, image: 'https://images.pexels.com/photos/1599321/pexels-photo-1599321.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'accessory', color: 'beige', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-18T10:00:00Z', onSale: false, tags: ['summer'] },
+            { id: 47, name: 'Knit Beanie', price: 19.99, image: 'https://images.pexels.com/photos/1526920/pexels-photo-1526920.jpeg?auto=compress&cs=tinysrgb&w=800', category: 'Kids', type: 'accessory', color: 'grey', sizes: ['S', 'M'], sleeveType: 'none', dateAdded: '2025-07-17T10:00:00Z', onSale: false, tags: [] },
         ];
 
 
@@ -378,8 +446,8 @@
                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
                                 <div>
                                     <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">You Create Reality</h1>
-                                    <p class="text-lg md:text-xl mt-4 mb-8">Designer Apparel. Your Vision.</p>
-                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Men' })">Shop Now</a>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Our Signature Collection for Everyone.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('youCreateReality')">Shop the Collection</a>
                                 </div>
                             </div>
                         </div>
@@ -389,17 +457,47 @@
                                 <div>
                                     <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Summer Collection</h1>
                                     <p class="text-lg md:text-xl mt-4 mb-8">Light, Bright & Ready for Sun.</p>
-                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Women' })">Explore Styles</a>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('summerCollection')">Explore Styles</a>
                                 </div>
                             </div>
                         </div>
                          <div class="slide">
-                            <img class="slide-image" src="https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="New Arrivals">
+                            <img class="slide-image" src="https://images.pexels.com/photos/1648377/pexels-photo-1648377.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="Kids Collection">
                              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
                                 <div>
-                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">New Arrivals</h1>
-                                    <p class="text-lg md:text-xl mt-4 mb-8">Fresh Looks Have Landed.</p>
-                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Men' })">Discover More</a>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">New Kids Arrivals</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Playful Styles for Little Ones.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Kids' })">Shop Kids</a>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="slide">
+                            <img class="slide-image" src="https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="Design Your Own">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
+                                <div>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Make It Yours</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Create a One-of-a-Kind Piece.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('customize')">Design Your Own</a>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="slide">
+                            <img class="slide-image" src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="Sale">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
+                                <div>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Limited Time Sale</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Up to 50% off on select styles. Don't miss out.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Sale' })">Shop Sale</a>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="slide">
+                            <img class="slide-image" src="https://images.pexels.com/photos/1337477/pexels-photo-1337477.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=2" alt="Denim">
+                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-center text-white p-4">
+                                <div>
+                                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Timeless Denim</h1>
+                                    <p class="text-lg md:text-xl mt-4 mb-8">Crafted for comfort, designed to last.</p>
+                                    <a href="#" class="btn-primary py-3 px-8 text-lg rounded-full" onclick="window.navigateTo('category', { category: 'Men' })">Explore Denim</a>
                                 </div>
                             </div>
                         </div>
@@ -621,24 +719,56 @@
                 <div id="page-customize" class="page">
                      <div class="container mx-auto px-4 py-12">
                         <h1 class="text-4xl font-extrabold text-center mb-4">Design Your Own T-Shirt</h1>
-                        <p class="text-center text-gray-600 mb-12">Upload your photo and see it come to life.</p>
-                        <div class="grid md:grid-cols-2 gap-12 items-center">
-                            <div class="flex flex-col items-center">
-                                <div id="tshirt-design-preview" class="mb-4 rounded-lg shadow-lg">
-                                    <img id="tshirt-image" src="https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=800" alt="White T-Shirt">
-                                    <div id="uploaded-image-preview"></div>
+                        <p class="text-center text-gray-600 mb-12">Add text and images, then drag, resize, and rotate to create your perfect design.</p>
+                        <div class="grid md:grid-cols-3 gap-8 items-start">
+                            <div class="md:col-span-2">
+                                <div class="flex justify-center mb-4">
+                                    <button id="front-view-btn" class="btn-primary py-2 px-6 rounded-l-lg">Front</button>
+                                    <button id="back-view-btn" class="btn-secondary py-2 px-6 rounded-r-lg">Back</button>
+                                </div>
+                                <div id="design-canvas">
+                                    <img id="tshirt-image-bg" src="https://res.cloudinary.com/dizzle/image/upload/v1721960135/ycr/tshirt-front.png" alt="T-Shirt">
                                 </div>
                             </div>
                             <div class="bg-white p-8 rounded-lg shadow-lg">
-                                <h2 class="text-2xl font-bold mb-4">Customize Your Design</h2>
-                                <p class="mb-4 text-gray-600">Click below to upload your image. PNG files with transparent backgrounds work best!</p>
-                                <input type="file" id="image-uploader" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
-                                <p class="text-xs text-gray-500 mt-2">Max file size: 5MB.</p>
+                                <h2 class="text-2xl font-bold mb-4">Customization Tools</h2>
+                                <div class="mb-4">
+                                    <label for="text-input" class="block text-sm font-medium text-gray-700">Add Text</label>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <input type="text" id="text-input" class="flex-1 block w-full rounded-none rounded-l-md p-2 border border-gray-300" placeholder="Your Text Here">
+                                        <button id="add-text-btn" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">Add</button>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                     <label for="image-uploader" class="block text-sm font-medium text-gray-700">Add Image</label>
+                                     <input type="file" id="image-uploader" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
+                                </div>
                                 <button id="add-custom-to-cart-btn" class="btn-primary w-full py-3 text-lg rounded-lg shadow-md mt-8">Add to Cart</button>
                             </div>
                         </div>
                     </div>
-                </div>`
+                </div>`,
+            youCreateReality: `
+                <div id="page-youCreateReality" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8">You Create Reality Collection</h1>
+                        <div id="ycr-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"></div>
+                    </div>
+                </div>`,
+            summerCollection: `
+                 <div id="page-summerCollection" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8">Summer Collection</h1>
+                        <div id="summer-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"></div>
+                    </div>
+                </div>`,
+            newArrivals: `
+                 <div id="page-newArrivals" class="page">
+                    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 mb-8">New Arrivals</h1>
+                        <div id="new-arrivals-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10"></div>
+                    </div>
+                </div>`,
         };
         
         // --- ROUTING & RENDERING ---
@@ -661,6 +791,9 @@
                 else if (pageId === 'signup') initSignupForm();
                 else if (pageId === 'admin') checkAdminAccess();
                 else if (pageId === 'customize') initCustomizePage();
+                else if (pageId === 'youCreateReality') renderYouCreateRealityPage();
+                else if (pageId === 'summerCollection') renderSummerCollectionPage();
+                else if (pageId === 'newArrivals') renderNewArrivalsPage();
             } else {
                  mainContent.innerHTML = `<div class="p-8 text-center"><h2>404 - Page Not Found</h2></div>`;
             }
@@ -670,7 +803,6 @@
         function renderHomePage() {
             const container = document.getElementById('home-products');
             if(container) {
-                // A curated list of 12 featured products
                 const featuredIds = [1, 2, 11, 7, 4, 6, 19, 18, 15, 5, 9, 20];
                 const featuredProducts = products.filter(p => featuredIds.includes(p.id));
                 container.innerHTML = featuredProducts.map(createProductCard).join('');
@@ -838,6 +970,30 @@
                     </div>
                 </div>`;
         }
+        
+        function renderYouCreateRealityPage() {
+            const container = document.getElementById('ycr-products');
+            if (container) {
+                const realityProducts = products.filter(p => [1, 2, 6, 7, 9, 11, 13, 16, 20, 27, 30, 34].includes(p.id));
+                container.innerHTML = realityProducts.map(createProductCard).join('');
+            }
+        }
+
+        function renderSummerCollectionPage() {
+            const container = document.getElementById('summer-products');
+            if (container) {
+                const summerProducts = products.filter(p => p.tags.includes('summer'));
+                container.innerHTML = summerProducts.map(createProductCard).join('');
+            }
+        }
+
+        function renderNewArrivalsPage() {
+            const container = document.getElementById('new-arrivals-products');
+            if (container) {
+                const sortedProducts = [...products].sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+                container.innerHTML = sortedProducts.slice(0, 12).map(createProductCard).join('');
+            }
+        }
 
         // --- SLIDER LOGIC ---
         function initSlider() {
@@ -880,18 +1036,158 @@
         
         // --- CUSTOMIZER ---
         function initCustomizePage() {
-            const uploader = document.getElementById('image-uploader');
-            const preview = document.getElementById('uploaded-image-preview');
-            uploader.addEventListener('change', (e) => {
+            const canvas = document.getElementById('design-canvas');
+            const addTextBtn = document.getElementById('add-text-btn');
+            const textInput = document.getElementById('text-input');
+            const imageUploader = document.getElementById('image-uploader');
+            const frontViewBtn = document.getElementById('front-view-btn');
+            const backViewBtn = document.getElementById('back-view-btn');
+            const tshirtImage = document.getElementById('tshirt-image-bg');
+
+            const tshirtImages = {
+                front: 'https://res.cloudinary.com/dizzle/image/upload/v1721960135/ycr/tshirt-front.png',
+                back: 'https://res.cloudinary.com/dizzle/image/upload/v1721960135/ycr/tshirt-back.png'
+            };
+            
+            let activeElement = null;
+            let designs = { front: [], back: [] };
+            let currentView = 'front';
+
+            const switchView = (view) => {
+                currentView = view;
+                tshirtImage.src = tshirtImages[view];
+                
+                if(view === 'front') {
+                    frontViewBtn.classList.replace('btn-secondary', 'btn-primary');
+                    backViewBtn.classList.replace('btn-primary', 'btn-secondary');
+                } else {
+                    backViewBtn.classList.replace('btn-secondary', 'btn-primary');
+                    frontViewBtn.classList.replace('btn-primary', 'btn-secondary');
+                }
+
+                document.querySelectorAll('.design-element').forEach(el => {
+                    el.style.display = el.dataset.view === currentView ? 'block' : 'none';
+                });
+            };
+
+            frontViewBtn.addEventListener('click', () => switchView('front'));
+            backViewBtn.addEventListener('click', () => switchView('back'));
+
+            const addElement = (type, content) => {
+                const element = document.createElement('div');
+                element.classList.add('design-element');
+                element.style.left = '100px';
+                element.style.top = '100px';
+                element.dataset.view = currentView;
+
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('element-content');
+
+                if (type === 'text') {
+                    contentDiv.textContent = content;
+                    contentDiv.setAttribute('contenteditable', 'true');
+                    element.style.width = '200px';
+                } else if (type === 'image') {
+                    contentDiv.style.backgroundImage = `url('${content}')`;
+                    element.style.width = '150px';
+                    element.style.height = '150px';
+                }
+
+                const resizer = document.createElement('div'); resizer.className = 'resizer';
+                const rotator = document.createElement('div'); rotator.className = 'rotator';
+                const deleteBtn = document.createElement('div'); deleteBtn.className = 'delete-btn';
+                deleteBtn.innerHTML = '&times;';
+
+                element.appendChild(contentDiv);
+                element.appendChild(resizer);
+                element.appendChild(rotator);
+                element.appendChild(deleteBtn);
+                canvas.appendChild(element);
+
+                makeInteractive(element);
+            };
+
+            addTextBtn.addEventListener('click', () => {
+                if (textInput.value) {
+                    addElement('text', textInput.value);
+                    textInput.value = '';
+                }
+            });
+
+            imageUploader.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (event) => {
-                        preview.style.backgroundImage = `url('${event.target.result}')`;
-                    }
+                        addElement('image', event.target.result);
+                    };
                     reader.readAsDataURL(file);
                 }
             });
+
+             const makeInteractive = (element) => {
+                const selectElement = (el) => {
+                    if (activeElement) {
+                        activeElement.classList.remove('selected');
+                    }
+                    activeElement = el;
+                    if(activeElement) activeElement.classList.add('selected');
+                };
+                
+                canvas.addEventListener('click', (e) => {
+                    if (!element.contains(e.target)) {
+                        if(activeElement) activeElement.classList.remove('selected');
+                        activeElement = null;
+                    }
+                }, true);
+
+
+                element.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    selectElement(element);
+                    
+                    let isDragging = false, isResizing = false, isRotating = false;
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+                    const startLeft = element.offsetLeft;
+                    const startTop = element.offsetTop;
+                    const startWidth = element.offsetWidth;
+                    const startHeight = element.offsetHeight;
+                    
+                    if (e.target.classList.contains('resizer')) isResizing = true;
+                    else if (e.target.classList.contains('rotator')) isRotating = true;
+                    else if (e.target.classList.contains('delete-btn')) {
+                        element.remove();
+                        return;
+                    }
+                    else isDragging = true;
+
+                    const handleMove = (moveEvent) => {
+                        if (isDragging) {
+                            element.style.left = `${startLeft + (moveEvent.clientX - startX)}px`;
+                            element.style.top = `${startTop + (moveEvent.clientY - startY)}px`;
+                        } else if (isResizing) {
+                            element.style.width = `${startWidth + (moveEvent.clientX - startX)}px`;
+                            element.style.height = `${startHeight + (moveEvent.clientY - startY)}px`;
+                        } else if (isRotating) {
+                            const rect = element.getBoundingClientRect();
+                            const centerX = rect.left + rect.width / 2;
+                            const centerY = rect.top + rect.height / 2;
+                            const angle = Math.atan2(moveEvent.clientY - centerY, moveEvent.clientX - centerX) * 180 / Math.PI;
+                            element.style.transform = `rotate(${angle}deg)`;
+                        }
+                    };
+
+                    const handleMouseUp = () => {
+                        document.removeEventListener('mousemove', handleMove);
+                        document.removeEventListener('mouseup', handleMouseUp);
+                    };
+
+                    document.addEventListener('mousemove', handleMove);
+                    document.addEventListener('mouseup', handleMouseUp);
+                });
+            };
+
             document.getElementById('add-custom-to-cart-btn').onclick = () => {
                 const product = {id: 99, name: 'Custom T-Shirt', price: 35.00, image: 'https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg?auto=compress&cs=tinysrgb&w=800'};
                 addToCart(product);
